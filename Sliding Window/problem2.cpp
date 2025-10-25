@@ -13,41 +13,33 @@ int main(){
     cin>>n>>k;
     cin>>x>>a>>b>>c;
     generator(x,a,b,c,n);
-    ll i = 0;
-    ll j = 0;
-    ll first_min = LLONG_MAX;
-    ll second_min = LLONG_MAX;
-    ll f_ans = 0;
-    while(j<vec.size()){
-        if(vec[j] <= first_min){
-            second_min = first_min;
-            first_min = vec[j];
+    deque<int> dq;
+    // ll i = 0;
+    // ll j = 0;
+    // set<ll> st;
+    ll ans = 0;
+    // while(j < static_cast<ll>(vec.size())){
+    //     st.insert(vec[j]);
+    //     j++;
+    //     if((j-i)==k){
+    //         ans^=*st.begin();
+    //         st.erase(vec[i]);
+    //         i++;
+    //     }
+    // }
+    // cout<<ans<<endl;
+    for(ll i = 0;i<n;i++){
+        while(!dq.empty() and dq.front()<=(i-k)){
+            dq.pop_front();
         }
-        else if(vec[j] < second_min){
-            second_min = vec[j];
+        while(!dq.empty() and vec[dq.back()]>vec[i]){
+            dq.pop_back();
         }
-        j++;
-        if((j-i)<k){
-            continue;
-        }
-        else if((j-i)==k){
-            f_ans^=first_min;
-            if(vec[i]==first_min){
-                first_min = LLONG_MAX;
-                second_min = LLONG_MAX;
-                for(ll idx = i+1; idx < j; idx++){
-                    if(vec[idx] <= first_min){
-                        second_min = first_min;
-                        first_min = vec[idx];
-                    }
-                    else if(vec[idx] < second_min){
-                        second_min = vec[idx];
-                    }
-                }
-            }
-            i++;
+        dq.push_back(i);
+        if(i>=k-1){
+            ans^=vec[dq.front()];
         }
     }
-    cout<<f_ans<<"\n";
+    cout<<ans<<endl;
     return 0;
 }
